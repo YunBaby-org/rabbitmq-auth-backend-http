@@ -16,7 +16,6 @@ RUN npm install
 COPY . .
 # Run compile. Compile with production setting if corresponding environment is set
 RUN if [ "$NODE_ENV" = "production" ]; then npm run compile -- -b tsconfig.prod.json; else npm run compile; fi
-RUN npm run compile
 
 #####################
 # Application Stage #

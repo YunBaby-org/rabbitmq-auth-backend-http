@@ -1,5 +1,5 @@
-# RabbitMQ Authentication Backend HTTP
+# RabbitMQ Authorization Backend HTTP
 
-RabbitMQ 的 HTTP 驗證後端
+RabbitMQ 的 HTTP 授權後端
 
-所有非管理員的使用者，如追蹤對象，都透過這個 HTTP 後端做 Authentication 和 Authorization。
+針對追蹤對象的授權伺服器，決定追蹤對象 consume/publish RabbitMQ 資源的權限

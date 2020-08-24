@@ -1,7 +1,7 @@
 {
-  "name": "rabbitmq-authentication-backend-http",
+  "name": "rabbitmq-authorization-backend-http",
   "version": "0.1.0",
-  "description": "The http authentication backend for internal RabbitMQ",
+  "description": "The http authorization backend for internal RabbitMQ",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "files": [

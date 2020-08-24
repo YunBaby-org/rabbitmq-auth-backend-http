@@ -12,7 +12,6 @@ async function setup() {
   app.use(expressLogger);
 
   /* rotuer goes here */
-  app.use('/auth/user', userRouter);
   app.use('/auth/vhost', vhostRouter);
   app.use('/auth/topic', topicRouter);
   app.use('/auth/resource', resourceRotuer);
