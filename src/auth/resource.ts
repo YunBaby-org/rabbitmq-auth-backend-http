@@ -1,10 +1,10 @@
-export interface IResourceParamter {
+export interface ResourceRequestParam {
   username: string;
   vhost: string;
   resource: string;
   name: string;
   permission: string;
 }
-export function authResource(params: IResourceParamter): boolean {
+export function authResource(params: ResourceRequestParam): boolean {
   return true;
 }

@@ -1,12 +1,12 @@
 import getAuthenticationCodeManager from '../authentication-code-manager';
 import {isProduction} from '../utility/isProduction';
 
-export interface IAuthenticateRequestParameter {
+export interface AuthenticateRequestParam {
   username: string;
 }
 
 export default async function createAuthenticationCode(
-  params: IAuthenticateRequestParameter
+  params: AuthenticateRequestParam
 ) {
   /* Implement your extra authenticate login here */
   if (isProduction) {

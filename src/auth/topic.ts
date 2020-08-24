@@ -1,4 +1,4 @@
-export interface ITopicParameter {
+export interface TopicRequestParam {
   username: string;
   vhost: string;
   resource: string;
@@ -6,6 +6,6 @@ export interface ITopicParameter {
   permission: string;
   routing_key: string;
 }
-export function authTopic(params: ITopicParameter): boolean {
+export function authTopic(params: TopicRequestParam): boolean {
   return true;
 }

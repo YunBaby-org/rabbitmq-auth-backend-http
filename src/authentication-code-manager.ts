@@ -2,24 +2,26 @@ import redis from 'redis';
 import {appLogger} from './logger';
 import {randomBytes} from 'crypto';
 
-export interface IAuthToken {
+export interface AuthenticationToken {
   username: string;
   authcode: string;
 }
-export interface IAuthCode {
+export interface AuthenticationCode {
   username: string;
   authcode: string;
   timeout: number;
 }
 
-export interface IAuthManagerParams {
+export interface AuthenticationManagerParams {
   redisHost: string;
   redisPort: number;
 }
 
 /* Singleton global object */
 let globalManager: AuthenticationCodeManager | undefined;
-export function initAuthenticationCodeManager(params: IAuthManagerParams) {
+export function initAuthenticationCodeManager(
+  params: AuthenticationManagerParams
+) {
   globalManager = new AuthenticationCodeManager(params);
   globalManager.connect();
   return globalManager;
@@ -36,10 +38,10 @@ export default function getAuthenticationCodeManager() {
  * @class AuthenticationCodeManager
  */
 export class AuthenticationCodeManager {
-  private params: IAuthManagerParams;
+  private params: AuthenticationManagerParams;
   private redisConnection: redis.RedisClient | undefined;
 
-  constructor(params: IAuthManagerParams) {
+  constructor(params: AuthenticationManagerParams) {
     this.params = params;
   }
 
@@ -67,13 +69,16 @@ export class AuthenticationCodeManager {
     return `auth:user:${username}:${authcode}`;
   }
 
-  async createAuthCode(username: string, timeouts = 90): Promise<IAuthCode> {
+  async createAuthCode(
+    username: string,
+    timeouts = 90
+  ): Promise<AuthenticationCode> {
     appLogger.debug(
       `User ${username} is creating new auth code with timeout ${timeouts}`
     );
     const token: Buffer = await new Promise(res => res(randomBytes(64)));
 
-    const authcode: IAuthCode = {
+    const authcode: AuthenticationCode = {
       username: username,
       authcode: token.toString('base64'),
       timeout: Math.floor(Date.now() / 1000) + timeouts,
@@ -90,7 +95,10 @@ export class AuthenticationCodeManager {
     /* or at least make the change a slow process. */
   }
 
-  async consumeAuthCode({username, authcode}: IAuthToken): Promise<boolean> {
+  async consumeAuthCode({
+    username,
+    authcode,
+  }: AuthenticationToken): Promise<boolean> {
     appLogger.debug(`User ${username} is consuming a auth code`, authcode);
     /* Fetch record from redis */
     const timeString = await this.getAuthcodeValue({username, authcode});
@@ -109,7 +117,11 @@ export class AuthenticationCodeManager {
     return false;
   }
 
-  private async setAuthcodeValue({username, authcode, timeout}: IAuthCode) {
+  private async setAuthcodeValue({
+    username,
+    authcode,
+    timeout,
+  }: AuthenticationCode) {
     appLogger.debug(`setAuthcodeValue(${username})`);
     return await new Promise((resolve, reject) => {
       this.redisConnection!.set(
@@ -119,7 +131,7 @@ export class AuthenticationCodeManager {
       );
     });
   }
-  private async deleteAuthcode({username, authcode}: IAuthToken) {
+  private async deleteAuthcode({username, authcode}: AuthenticationToken) {
     appLogger.debug(`deleteAuthcode(${username})`);
     return await new Promise((resolve, reject) => {
       this.redisConnection!.del(
@@ -131,7 +143,7 @@ export class AuthenticationCodeManager {
   private async getAuthcodeValue({
     username,
     authcode,
-  }: IAuthToken): Promise<string | null> {
+  }: AuthenticationToken): Promise<string | null> {
     appLogger.debug(`getAuthcodeValue(${username})`);
     return await new Promise((resolve, reject) => {
       this.redisConnection!.get(
