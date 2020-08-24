@@ -8,8 +8,10 @@ authcodeRouter.use((request, response, next) => {
   /* TODO: check if JWT correct here */
 
   /* check if username is here */
-  if (!(request.body && request.body.username))
+  if (!(request.body && request.body.username)) {
     response.status(400).send(errorResponse('username is not specified'));
+    return;
+  }
 
   next();
 });
@@ -17,7 +19,9 @@ authcodeRouter.use((request, response, next) => {
 // TODO: Hook this route with jwt authentication
 authcodeRouter.post('/', async (request, response) => {
   if (process.env.NODE_ENV !== 'production') {
-    const crendential = await createAuthenticationCode(request.body.username);
+    const crendential = await createAuthenticationCode({
+      username: request.body.username as string,
+    });
     response.status(200).send(successResponse(crendential));
   } else {
     response
