@@ -3,11 +3,18 @@ import bodyParser from 'body-parser';
 import {expressLogger, expressErrorLogger, appLogger} from './logger';
 import {userRouter, vhostRouter, resourceRotuer, topicRouter} from './router';
 import {authcodeRouter} from './authRouter';
+import {initAuthenticationCodeManager} from './authentication-code-manager';
 
 async function setup() {
   const app = express();
   const port = parseInt(process.env.PORT || '3000');
   const hostname = process.env.hostname || '0.0.0.0';
+
+  /* Initialize authentication code manager */
+  initAuthenticationCodeManager({
+    redisHost: process.env.REDIS_HOST || 'localhost',
+    redisPort: parseInt(process.env.REDIS_PORT || '6379'),
+  });
 
   app.use(bodyParser.json());
   app.use(expressLogger);
