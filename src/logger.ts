@@ -17,11 +17,13 @@ function winstonFormat(label: string) {
 }
 
 export const appLogger = winston.createLogger({
+  level: isProduction ? 'info' : 'debug',
   transports: [new winston.transports.Console()],
   format: winstonFormat('rabbitmq-http-auth-backend'),
 });
 
 export const expressLogger = expressWinston.logger({
+  level: isProduction ? 'info' : 'debug',
   transports: [new winston.transports.Console()],
   format: winstonFormat('express'),
   meta: true,
@@ -30,6 +32,7 @@ export const expressLogger = expressWinston.logger({
 });
 
 export const expressErrorLogger = expressWinston.errorLogger({
+  level: isProduction ? 'info' : 'debug',
   transports: [new winston.transports.Console()],
   format: winstonFormat('express-error'),
 });
