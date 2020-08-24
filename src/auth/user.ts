@@ -1,7 +1,7 @@
 export interface IUserParameter {
-  username: string,
-  password: string
+  username: string;
+  password: string;
 }
 export function authUser({username, password}: IUserParameter): boolean {
-  return username.match(/^user/) !== null
+  return username.match(/^user/) !== null;
 }
