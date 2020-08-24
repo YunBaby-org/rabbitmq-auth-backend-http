@@ -13,8 +13,8 @@ function answer(bool: boolean) {
   return bool ? 'allow' : 'deny';
 }
 
-userRouter.post('/', (request, response) => {
-  response.status(200).send(answer(authUser(request.body)));
+userRouter.post('/', async (request, response) => {
+  response.status(200).send(answer(await authUser(request.body)));
 });
 
 vhostRouter.post('/', (request, response) => {
@@ -32,10 +32,12 @@ resourceRotuer.post('/', (request, response) => {
 if (process.env.NODE_ENV !== 'production') {
   /* These route is for testing purpose */
   /* You can test it by browser querystring */
-  userRouter.get('/', (request, response) => {
+  userRouter.get('/', async (request, response) => {
     response
       .status(200)
-      .send(answer(authUser((request.query as unknown) as IUserParameter)));
+      .send(
+        answer(await authUser((request.query as unknown) as IUserParameter))
+      );
   });
 
   vhostRouter.get('/', (request, response) => {

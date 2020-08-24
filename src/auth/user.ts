@@ -4,7 +4,10 @@ export interface IUserParameter {
   username: string;
   password: string;
 }
-export function authUser({username, password}: IUserParameter): boolean {
+export async function authUser({username, password}: IUserParameter) {
   const authManager = getAuthenticationCodeManager();
-  return username.match(/^user/) !== null;
+  return await authManager.consumeAuthCode({
+    username: username,
+    authcode: password,
+  });
 }
