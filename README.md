@@ -20,9 +20,15 @@ Authorization 這部份管理使用者的權限(使用 RabbitMQ 內資源的權�
 [https://github.com/rabbitmq/rabbitmq-auth-backend-http](https://github.com/rabbitmq/rabbitmq-auth-backend-http)
 
 - `HTTP POST /auth/user` 回傳 user 是否能夠登入。目前需要 username 是 user 開頭, 且 password 是從 `HTTP POST /authentication` 取得的 Authorization token。每個 token 只能用一次。 username 和 password 必須對應。
-- `HTTP POST /auth/vhost` 回傳 user 是否能使用對應的 vhost。目前只要 username 是 user 開頭，且 vhost 為 `/user` 就給過
+- `HTTP POST /auth/vhost` 回傳 user 是否能使用對應的 vhost。目前只要 vhost 為 `user` 就給過
 - `HTTP POST /auth/topic` 回傳 user 能否對該 Topic 使用 Routing key。目前總是給過
 - `HTTP POST /auth/resource` 回傳 user 能否使用對應資源。目前總是給過
+
+This is a example of valid rabbitmq connection URI
+
+```
+amqp://${username}:{authentication code}@{hostname}/{vhost}
+```
 
 ## 測試 Authentication
 
@@ -54,4 +60,3 @@ allow
 ```
 
 ```
-
