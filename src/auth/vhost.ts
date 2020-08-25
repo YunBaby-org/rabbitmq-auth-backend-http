@@ -4,5 +4,5 @@ export interface VhostRequestParam {
   ip: string;
 }
 export function authVhost({username, vhost, ip}: VhostRequestParam): boolean {
-  return username.match(/^user/) !== null && vhost === '/user';
+  return vhost === 'user';
 }
