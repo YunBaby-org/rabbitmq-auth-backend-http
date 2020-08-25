@@ -1,6 +1,7 @@
 import redis from 'redis';
 import {appLogger} from './logger';
 import {randomBytes} from 'crypto';
+import {encodeUrlSafeBase64} from './utility/base64url-transform';
 
 export interface AuthenticationToken {
   username: string;
@@ -80,9 +81,10 @@ export class AuthenticationCodeManager {
 
     const authcode: AuthenticationCode = {
       username: username,
-      authcode: token.toString('base64'),
+      authcode: encodeUrlSafeBase64(token.toString('base64')),
       timeout: Math.floor(Date.now() / 1000) + timeouts,
     };
+    appLogger.debug(`New generated auto code ${authcode.authcode}`);
 
     await this.setAuthcodeValue(authcode);
 

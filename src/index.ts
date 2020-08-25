@@ -17,6 +17,7 @@ async function setup() {
   });
 
   app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: false}));
   app.use(expressLogger);
 
   /* rotuer goes here */
