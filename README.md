@@ -2,6 +2,15 @@
 
 RabbitMQ 的 HTTP Authentication + Authorization 後端
 
+```shell
+ts-node ./src/index.ts                      # Enable both authn & authz routes(implicit)
+env AUTH='AUTHZ' ts-node ./src/index.ts     # Enable authz route only
+env AUTH='AUTHN' ts-node ./src/index.ts     # Enable authn route only
+env AUTH='AUTH' ts-node ./src/index.ts      # Enable both authn & authz routes(explicit)
+```
+
+在 docker build 時，給出 ``BUILD_ENV`` 為 ``production`` 可以避免將 SourceMap 編譯進原始碼
+
 ## Authentication
 
 這套服務是 RabbitMQ 的驗證後端，負責驗證使用者連線請求。
@@ -19,7 +28,7 @@ RabbitMQ 的 HTTP Authentication + Authorization 後端
 Authorization 這部份管理使用者的權限(使用 RabbitMQ 內資源的權限)。基本上只有 RabbitMQ 本身會用到這部份的東西，所以不多寫，有興趣看
 [https://github.com/rabbitmq/rabbitmq-auth-backend-http](https://github.com/rabbitmq/rabbitmq-auth-backend-http)
 
-- `HTTP POST /auth/user` 回傳 user 是否能夠登入。目前需要 username 是 user 開頭, 且 password 是從 `HTTP POST /authentication` 取得的 Authorization token。每個 token 只能用一次。 username 和 password 必須對應。
+- `HTTP POST /auth/user` 回傳 user 是否能夠登入。 password 是從 `HTTP POST /authentication` 取得的 Authorization token。每個 token 只能用一次。 username 和 password 必和當初驗證時的 username/authcode 對應。
 - `HTTP POST /auth/vhost` 回傳 user 是否能使用對應的 vhost。目前只要 vhost 為 `user` 就給過
 - `HTTP POST /auth/topic` 回傳 user 能否對該 Topic 使用 Routing key。目前總是給過
 - `HTTP POST /auth/resource` 回傳 user 能否使用對應資源。目前總是給過
