@@ -1,14 +1,25 @@
 import express from 'express';
+import os from 'os';
 import bodyParser from 'body-parser';
 import {expressLogger, expressErrorLogger, appLogger} from './logger';
 import {userRouter, vhostRouter, resourceRotuer, topicRouter} from './router';
 import {authcodeRouter} from './authRouter';
 import {initAuthenticationCodeManager} from './authentication-code-manager';
+import {isProduction} from './utility/isProduction';
 
 async function setup() {
   const app = express();
   const port = parseInt(process.env.PORT || '3000');
   const hostname = process.env.hostname || '0.0.0.0';
+
+  if (isProduction)
+    appLogger.info(
+      `RabbitMQ auth backend(${os.hostname()}) running in Production mode`
+    );
+  else
+    appLogger.info(
+      `RabbitMQ auth backend(${os.hostname()}) running in Development mode`
+    );
 
   /* Initialize authentication code manager */
   initAuthenticationCodeManager({
