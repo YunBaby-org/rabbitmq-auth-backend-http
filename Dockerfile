@@ -2,6 +2,7 @@
 # Compile Stage #
 #################
 FROM node:alpine as builder
+ARG BUILD_ENV
 
 # Setting working directory
 WORKDIR /usr/app
@@ -15,7 +16,7 @@ RUN npm install
 # Copy project file
 COPY . .
 # Run compile. Compile with production setting if corresponding environment is set
-RUN if [ "$NODE_ENV" = "production" ]; then npm run compile -- -b tsconfig.prod.json; else npm run compile; fi
+RUN if [ "$BUILD_ENV" = "production" ]; then npm run compile-production ; else npm run compile; fi
 
 #####################
 # Application Stage #
