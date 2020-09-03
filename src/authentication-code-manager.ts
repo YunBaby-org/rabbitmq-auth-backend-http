@@ -77,7 +77,7 @@ export class AuthenticationCodeManager {
     appLogger.debug(
       `User ${username} is creating new auth code with timeout ${timeouts}`
     );
-    const token: Buffer = await new Promise(res => res(randomBytes(64)));
+    const token: Buffer = await new Promise(res => res(randomBytes(16)));
 
     const authcode: AuthenticationCode = {
       username: username,
