@@ -9,7 +9,7 @@ env AUTH='AUTHN' ts-node ./src/index.ts     # Enable authn route only
 env AUTH='AUTH' ts-node ./src/index.ts      # Enable both authn & authz routes(explicit)
 ```
 
-在 docker build 時，給出 ``BUILD_ENV`` 為 ``production`` 可以避免將 SourceMap 編譯進原始碼
+在 docker build 時，給出 `BUILD_ENV` 為 `production` 可以避免將 SourceMap 編譯進原始碼
 
 ## Authentication
 
@@ -45,7 +45,7 @@ amqp://${username}:{authentication code}@{hostname}/{vhost}
 # 指令
 curl -X POST -H 'Content-Type: application/json' -i http://localhost:3000/authentication --data '{ "username": "user5566" }'
 # 預期結果
-{"status":"success","username":"user5566","authcode":"KJ.aAuTHzcf2EClE.yDUtGnQLDiUUXRzNymf1f3o6cF7Zg1FK6UfaRAgjV1d8iup.69axj4ryxmKH_4gU8zwXA--","timeout":1598326206}
+{"status":"success","username":"user5566","authcode":"0565341923f30a85c7f38d220be8035d","timeout":1599158779}
 ```
 
 ## Testing Authorization with user
@@ -55,9 +55,9 @@ This demonstrate how RabbitMQ http auth backend plugin works, you don't need to 
 ```
 # Get authorization code
 $ curl -X POST -H 'Content-Type: application/json' -i http://localhost:3000/authentication --data '{ "username": "user5566" }'
-{"status":"success","username":"user5566","authcode":"2iC4_gi0QPE5PVp7JvsOuZwylv_glQDIoohZkEJHgvmF_cZHkbfrk.xZ.D1XWIhynCjwzsYA_r1eqaaP0GGEag--","timeout":1598326269}
+{"status":"success","username":"user5566","authcode":"0565341923f30a85c7f38d220be8035d","timeout":1598326269}
 
-$ curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' -i http://localhost:3000/auth/user --data 'username=user5566&password=2iC4_gi0QPE5PVp7JvsOuZwylv_glQDIoohZkEJHgvmF_cZHkbfrk.xZ.D1XWIhynCjwzsYA_r1eqaaP0GGEag--'
+$ curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' -i http://localhost:3000/auth/user --data 'username=user5566&password=0565341923f30a85c7f38d220be8035d'
 allow
 #
 ```
