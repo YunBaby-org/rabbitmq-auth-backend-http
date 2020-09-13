@@ -60,19 +60,24 @@ async function authByJwt(username: string, token: string) {
     /* Test if the user put the claiming vhost in username */
     /* For some limit of RabbitMQ HTTP backend, we have to make the username like */
     /* username:vhost */
-    const [name, vhost] = username.split(':');
-    if (typeof name !== 'string' || typeof vhost !== 'string') {
+    const [name, audience] = username.split(':');
+    if (typeof name !== 'string' || typeof audience !== 'string') {
       appLogger.debug('Bad username');
       return false;
     }
     /* The username must match the value in JWT field */
     if (name !== jwt.sub) {
-      appLogger.debug('Name must match jwt subject');
+      appLogger.debug('Incorrect subject');
+      return false;
+    }
+    /* The audience must match the second part of username */
+    if (audience !== jwt.aud) {
+      appLogger.debug('Incorrect audience');
       return false;
     }
     /* the vhost claim must in permission array */
-    if (!jwt.permission.vhost.includes(vhost)) {
-      appLogger.debug('No JWT vhost match found');
+    if (!jwt.permission.vhost.includes('/')) {
+      appLogger.debug('No JWT vhost / permission');
       return false;
     }
     /* OK */
