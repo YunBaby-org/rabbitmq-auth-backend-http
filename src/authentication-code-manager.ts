@@ -1,6 +1,7 @@
 import redis from 'redis';
 import {appLogger} from './logger';
 import {randomBytes} from 'crypto';
+import {promisify} from 'util';
 
 export interface AuthenticationToken {
   username: string;

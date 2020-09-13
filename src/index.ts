@@ -37,13 +37,13 @@ async function setup() {
 
   /* rotuer goes here */
   if (runAsAuthorizationServer) {
-    app.use('/auth/user', userRouter);
     app.use('/auth/vhost', vhostRouter);
     app.use('/auth/topic', topicRouter);
     app.use('/auth/resource', resourceRotuer);
     appLogger.info('Authorization route enabled');
   }
   if (runAsAuthenticationServer) {
+    app.use('/auth/user', userRouter);
     app.use('/authentication', authcodeRouter);
     appLogger.info('Authentication route enabled');
   }
