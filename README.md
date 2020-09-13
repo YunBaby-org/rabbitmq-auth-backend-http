@@ -11,17 +11,28 @@ env AUTH='AUTH' ts-node ./src/index.ts      # Enable both authn & authz routes(e
 
 在 docker build 時，給出 `BUILD_ENV` 為 `production` 可以避免將 SourceMap 編譯進原始碼
 
-## Authentication
+## Frontend Authentication
 
 這套服務是 RabbitMQ 的驗證後端，負責驗證使用者連線請求。
 
-向 RabbitMQ 連線時，需要給出你的 username 還有 Authorization Code， Authorization Code 必須要 `HTTP POST /authentication` 來取得。
+向 RabbitMQ 連線時，需要給出你的 username 還有 Authentication Code， Authentication Code 必須要 `HTTP POST /authentication` 來取得。
 
 基於安全理由這個 Code 有下面這些限制
 
 - 需要透過使用者先前登入的 JWT 驗證(未實作，目前只要給 {username: "someone"} 就給過)
 - Authentication Code 在 Production 於 90 秒後過期, 其餘情況維持 30 分鐘
 - Authentication Code 使用後即被 **consume**，意指每個 code 只能使用一次
+
+- RabbitMQ Username: username
+- RabbitMQ Password: authentication code
+- RabbitMQ vhost: /
+- 你可能會很好奇為什麼 Mobile 和 Frontend 帳號的格式不一樣，笑死因為有人 JWT 隨便簽ㄏㄏ
+
+## Mobile Authentication
+
+- RabbitMQ Username: username:audience
+- RabbitMQ Password: The JWT token
+- RabbitMQ vhost: /
 
 ## Authorization
 
@@ -65,7 +76,3 @@ allow
 ## 附註
 
 - Authentication Code !== Access Token !== Refresh Token，他們三個不同概念
-
-```
-
-```
